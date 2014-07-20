@@ -3,6 +3,7 @@
 GameOfLife::GameOfLife()
 {
     GameDisplay = new QTextEdit();
+	GameDisplay->setStyleSheet("QTextEdit { background-color: rgb(0, 0, 0) }");
     setCentralWidget(GameDisplay);
 
     ToolBar = addToolBar(tr("Begin"));
@@ -191,9 +192,9 @@ std::string GameOfLife::FormatGameString ()
         for (std::vector<bool>::iterator b = a->begin(); b != a->end(); b++)
         {
             if (*b)
-                str += "#";
-            else
                 str += "<font color=\"white\">#</font>";
+            else
+                str += "<font color=\"black\">#</font>";
         }
 
         str += "<br>";
@@ -220,7 +221,7 @@ void GameOfLife::UpdateGameDisplay()
 
 void GameOfLife::DisplayGameStats()
 {
-	std::string str =   "The game of life has reached a stable equilibrium. " +
+	std::string str =   "<font color=\"white\">The game of life has reached a stable equilibrium. " +
                         std::to_string(last_gen) +
                         " cells remain alive, the first generation contained " +
                         std::to_string(first_gen) +
@@ -230,7 +231,7 @@ void GameOfLife::DisplayGameStats()
                         std::to_string(born_cells) +
                         " cells were born and " +
                         std::to_string(dead_cells) +
-                        " cells died.<br>";
+                        " cells died.</font><br>";
 
     GameDisplay->append(str.c_str());
 }
