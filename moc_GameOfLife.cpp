@@ -59,7 +59,7 @@ const QMetaObjectExtraData GameOfLife::staticMetaObjectExtraData = {
 };
 
 const QMetaObject GameOfLife::staticMetaObject = {
-    { &QWidget::staticMetaObject, qt_meta_stringdata_GameOfLife,
+    { &QMainWindow::staticMetaObject, qt_meta_stringdata_GameOfLife,
       qt_meta_data_GameOfLife, &staticMetaObjectExtraData }
 };
 
@@ -77,12 +77,12 @@ void *GameOfLife::qt_metacast(const char *_clname)
     if (!_clname) return 0;
     if (!strcmp(_clname, qt_meta_stringdata_GameOfLife))
         return static_cast<void*>(const_cast< GameOfLife*>(this));
-    return QWidget::qt_metacast(_clname);
+    return QMainWindow::qt_metacast(_clname);
 }
 
 int GameOfLife::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QWidget::qt_metacall(_c, _id, _a);
+    _id = QMainWindow::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {

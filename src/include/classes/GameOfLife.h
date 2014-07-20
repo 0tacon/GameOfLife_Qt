@@ -1,28 +1,25 @@
 #include <cstdint>
-#include <cstdio>
-#include <cstdlib>
-#include <iostream>
 #include <thread>
 #include <chrono>
 #include <vector>
 #include <utility>
 #include <algorithm>
 #include <ctime>
-#include <QApplication>
-#include <QWidget>
-#include <QPushButton>
+#include <QtGui>
 #include <QTextEdit>
 #include <QTimer>
+#include <QToolBar>
+#include <QAction>
 
 #ifndef _GAMEOFLIFE_
 #define _GAMEOFLIFE_
 
-class GameOfLife : public QWidget
+class GameOfLife : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    GameOfLife(QWidget *parent = 0);
+    GameOfLife();
 
     void CreateGame(uint8_t side_length_x, uint8_t side_length_y);
     void CreateGame(uint8_t side_length_x, uint8_t side_length_y, std::vector<std::pair<uint8_t, uint8_t> > initial_state);
@@ -35,6 +32,10 @@ public:
 
     void StopTimer();
 
+	void UpdateGameDisplay();
+
+	void DisplayGameStats();
+
 private slots:
     void Iterate();
     void StartTimer();
@@ -42,7 +43,8 @@ private slots:
 private:
     QTextEdit *GameDisplay;
     QTimer *GameTimer;
-    QPushButton *Begin;
+	QToolBar *ToolBar;
+	QAction *Begin;
 
     std::vector<std::vector<bool> > Board, PrevGen;
     uint8_t dim_x, dim_y;

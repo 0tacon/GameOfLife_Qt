@@ -1,12 +1,14 @@
 #include "GameOfLife.h"
 
-GameOfLife::GameOfLife(QWidget *parent) : QWidget(parent)
+GameOfLife::GameOfLife()
 {
     GameDisplay = new QTextEdit();
-    GameDisplay->show();
+    setCentralWidget(GameDisplay);
 
-    Begin = new QPushButton("Begin", this);
-    connect(Begin, SIGNAL(clicked()), this, SLOT(StartTimer()));
+    ToolBar = addToolBar(tr("Begin"));
+	Begin = new QAction(QIcon(), tr("Begin"), this);
+	ToolBar->addAction(Begin);
+	connect(Begin, SIGNAL(triggered()), this, SLOT(StartTimer()));
 
     GameTimer = new QTimer(this);
     connect(GameTimer, SIGNAL(timeout()), this, SLOT(Iterate()));
@@ -50,8 +52,7 @@ void GameOfLife::CreateGame(uint8_t side_length_x, uint8_t side_length_y)
 
     first_gen = born_cells;
 
-    std::string str = FormatGameString();
-    GameDisplay->setHtml(str.c_str());
+	UpdateGameDisplay();
 }
 
 void GameOfLife::CreateGame(uint8_t side_length_x, uint8_t side_length_y, std::vector<std::pair<uint8_t, uint8_t> > initial_state)
@@ -82,8 +83,7 @@ void GameOfLife::CreateGame(uint8_t side_length_x, uint8_t side_length_y, std::v
 
     first_gen = born_cells;
 
-    std::string str = FormatGameString();
-    GameDisplay->setHtml(str.c_str());
+	UpdateGameDisplay();
 }
 
 void GameOfLife::Iterate()
@@ -107,12 +107,17 @@ void GameOfLife::Iterate()
     Board = NextGen;
 
     generations++;
-
-    std::string str = FormatGameString();
-    GameDisplay->setHtml(str.c_str());
+	
+	UpdateGameDisplay();
 
     if (!evolution)
+	{
         StopTimer();
+
+		last_gen = born_cells - dead_cells;
+
+		DisplayGameStats();
+	}
 }
 
 bool GameOfLife::IterateCell (bool cell, uint8_t row, uint8_t col)
@@ -205,10 +210,17 @@ void GameOfLife::StartTimer()
 void GameOfLife::StopTimer()
 {
     if (GameTimer->isActive()) GameTimer->stop();
+}
 
-    last_gen = born_cells - dead_cells;
+void GameOfLife::UpdateGameDisplay()
+{
+	std::string str = FormatGameString();
+    GameDisplay->setHtml(str.c_str());
+}
 
-    std::string str =   "The game of life has reached a stable equilibrium. " +
+void GameOfLife::DisplayGameStats()
+{
+	std::string str =   "The game of life has reached a stable equilibrium. " +
                         std::to_string(last_gen) +
                         " cells remain alive, the first generation contained " +
                         std::to_string(first_gen) +
